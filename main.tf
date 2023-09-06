@@ -7,6 +7,20 @@ terraform {
   }
 }
 
+# Variable Checks
+#resource "terraform_data" "validate_variables" {
+#  count = var.needs_email && (
+#    length(var.dkim_key) < 1 ||
+#    length(var.dkim_selector) < 1 ||
+#    length(var.mx_records) < 1 ||
+#    length(var.spf_records) < 1
+#  ) ? 1 : 0
+#
+#  provisioner "local-exec" {
+#    command = "echo 'Error: If needs_email is true, dkim_key, dkim_selector, mx_records, and spf_records must be provided' && false"
+#  }
+#}
+
 # ROUTE 53
 resource "aws_route53_zone" "primary" {
   name = var.domain_name
@@ -21,6 +35,13 @@ resource "aws_route53_record" "mx" {
   ttl     = 300
 
   records = var.mx_records
+
+  lifecycle {
+    precondition {
+      condition     = var.needs_email && length(var.mx_records) < 1
+      error_message = "If needs_email is true, mx_records must be provided."
+    }
+  }
 }
 
 resource "aws_route53_record" "spf" {
@@ -31,6 +52,13 @@ resource "aws_route53_record" "spf" {
   ttl     = 300
 
   records = [var.spf_records]
+
+  lifecycle {
+    precondition {
+      condition     = var.needs_email && length(var.spf_records) < 1
+      error_message = "If needs_email is true, spf_records must be provided."
+    }
+  }
 }
 
 resource "aws_route53_record" "dkim" {
@@ -45,6 +73,13 @@ resource "aws_route53_record" "dkim" {
     "k=rsa;",
     "p=${var.dkim_key}"
   ]
+
+  lifecycle {
+    precondition {
+      condition     = var.needs_email && (length(var.dkim_selector) < 1 || length(var.dkim_key) < 1)
+      error_message = "If needs_email is true, dkim_selector and dkim_key must be provided."
+    }
+  }
 }
 
 # SSl Certificate

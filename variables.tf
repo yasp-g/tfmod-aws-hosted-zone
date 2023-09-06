@@ -14,21 +14,25 @@ variable "needs_email" {
 variable "mx_records" {
   description = "The MX records for the email provider"
   type        = list(string)
+  default     = []
 }
 
 variable "spf_records" {
   description = "The SPF record for the email provider"
   type        = string
+  default     = ""
 }
 
 variable "dkim_selector" {
   description = "The DKIM selector for the email provider"
   type        = string
+  default     = ""
 }
 
 variable "dkim_key" {
   description = "The DKIM key for the email provider"
   type        = string
+  default     = ""
 }
 
 # SSL Variables
