@@ -4,6 +4,24 @@ Terraform module for provisioning a hosted zone in aws with or without an associ
 ## Provider
 hashicorp/aws 5.1.0
 
+# Example
+```hcl
+module "hosted_zone" {
+  source = "git::https://github.com/yasp-g/tfmod-aws-hosted-zone.git"
+
+  domain_name   = <your_domain>
+  needs_ssl     = true
+  needs_email   = true
+  mx_records    = [
+    "10 mail.protonmail.ch.",
+    "20 mailsec.protonmail.ch."
+  ]
+  spf_records   = "v=spf1 include:_spf.protonmail.ch mx ~all"
+  dkim_selector = "protonmail._domainkey"
+  dkim_key      = <your_dkim_key_for_protonmail>
+}
+```
+
 # Module Resources
 - `aws_route53_zone`
 - `aws_route53_record`
