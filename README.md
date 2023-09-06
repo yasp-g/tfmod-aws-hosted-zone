@@ -7,7 +7,7 @@ hashicorp/aws 5.1.0
 # Module Resources
 - `aws_route53_zone`
 - `aws_route53_record`
-  - `mx`, `spf`, `dkim` and SSL certificate
+  - For `mx`, `spf`, `dkim` and SSL certificate
 - `aws_acm_certificate`
 - `aws_acm_certificate_validation`
 - `aws_route53_record`
