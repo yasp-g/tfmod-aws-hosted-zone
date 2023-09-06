@@ -1,5 +1,5 @@
 # Module Purpose
-Terraform module for provisioning a hosted zone in aws with or without an associated SSL certificate.
+Terraform module for provisioning a hosted zone in aws with or without an associated SSL certificate. Provides MX records for gmail.
 
 ## Provider
 hashicorp/aws 5.1.0
