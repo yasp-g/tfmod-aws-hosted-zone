@@ -14,34 +14,29 @@ resource "aws_route53_zone" "primary" {
 
 # gmail records
 resource "aws_route53_record" "mx" {
+  count   = var.needs_email ? 1 : 0
   zone_id = aws_route53_zone.primary.zone_id
   name    = var.domain_name
   type    = "MX"
   ttl     = 300
 
-  records = [
-    "1 ASPMX.L.GOOGLE.COM.",
-    "5 ALT1.ASPMX.L.GOOGLE.COM.",
-    "5 ALT2.ASPMX.L.GOOGLE.COM.",
-    "10 ALT3.ASPMX.L.GOOGLE.COM.",
-    "10 ALT4.ASPMX.L.GOOGLE.COM."
-  ]
+  records = var.mx_records
 }
 
 resource "aws_route53_record" "spf" {
+  count   = var.needs_email ? 1 : 0
   zone_id = aws_route53_zone.primary.zone_id
   name    = var.domain_name
   type    = "TXT"
   ttl     = 300
 
-  records = [
-    "v=spf1 include:_spf.google.com ~all"
-  ]
+  records = [var.spf_records]
 }
 
-resource "aws_route53_record" "dkim1" {
+resource "aws_route53_record" "dkim" {
+  count   = var.needs_email ? 1 : 0
   zone_id = aws_route53_zone.primary.zone_id
-  name    = "google._domainkey.${var.domain_name}"
+  name    = "${var.dkim_selector}.${var.domain_name}"
   type    = "TXT"
   ttl     = 300
 
