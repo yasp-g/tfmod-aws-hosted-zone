@@ -38,7 +38,7 @@ resource "aws_route53_record" "mx" {
 
   lifecycle {
     precondition {
-      condition     = var.needs_email && length(var.mx_records) < 1
+      condition     = var.needs_email && length(var.mx_records) > 1
       error_message = "If needs_email is true, mx_records must be provided."
     }
   }
@@ -55,7 +55,7 @@ resource "aws_route53_record" "spf" {
 
   lifecycle {
     precondition {
-      condition     = var.needs_email && length(var.spf_records) < 1
+      condition     = var.needs_email && length(var.spf_records) > 1
       error_message = "If needs_email is true, spf_records must be provided."
     }
   }
@@ -76,7 +76,7 @@ resource "aws_route53_record" "dkim" {
 
   lifecycle {
     precondition {
-      condition     = var.needs_email && (length(var.dkim_selector) < 1 || length(var.dkim_key) < 1)
+      condition     = var.needs_email && (length(var.dkim_selector) > 1 || length(var.dkim_key) > 1)
       error_message = "If needs_email is true, dkim_selector and dkim_key must be provided."
     }
   }
